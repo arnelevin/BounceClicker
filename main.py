@@ -19,7 +19,7 @@ class Game:
 
         self.player = Player((pygame.mouse.get_pos()[0], HEIGHT - 40))
 
-        self.money = 15
+        self.money = 0
         self.balls = []
 
 
