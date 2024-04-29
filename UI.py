@@ -15,3 +15,4 @@ Channel4 = pygame.mixer.Channel(3)
 
 my_font = pygame.font.SysFont("Arial", 80)
 highscore_font = pygame.font.SysFont("Arial", 40)
+button_font = pygame.font.SysFont("Arial", 40)

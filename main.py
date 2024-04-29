@@ -1,9 +1,9 @@
-import pygame.time
 
 from UI import *
 from ball import Ball
 from player import Player
 from upgrades import Upgrades
+from button import Button
 
 class Game:
     def __init__(self):
@@ -26,6 +26,7 @@ class Game:
         self.ball_cooldown = self.upgrades.ball_cooldown
         self.cooldown_time = 0
 
+        self.spawn_amount = self.upgrades.spawn_amount
 
         highscore_file = open("highscore.txt", "r")
         self.highscore = int(highscore_file.read())
@@ -48,39 +49,51 @@ class Game:
 
         SCREEN.fill("green")
 
-        exit_surface = pygame.surface.Surface((50, 50))
-        exit_surface.fill("red")
-        exit_rect = exit_surface.get_rect(center = (SCREEN.get_width() -100, 50))
-
-        SCREEN.blit(exit_surface, exit_rect)
-
-        if exit_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        exit_button = Button("Exit", (WIDTH - 200, 50), 0)
+        exit_button.update()
+        if exit_button.checkClick():
             self.shopping = False
             self.leveling = True
 
-        add_health_surface = pygame.surface.Surface((50, 50))
-        add_health_surface.fill("red")
-        add_health_rect = add_health_surface.get_rect(center=(300, HEIGHT/2))
 
-        SCREEN.blit(add_health_surface, add_health_rect)
+        health_button = Button("Health", (300, 300), 5)
+        health_button.update()
 
-        if add_health_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and self.money >= 5:
-            self.money -= 5
+        if health_button.checkClick() and self.money >= health_button.cost:
+            self.money -= health_button.cost
             self.upgrades.add_BallHealth(1)
 
-        decrease_cooldown_surface = pygame.surface.Surface((50, 50))
-        decrease_cooldown_surface.fill("red")
-        decrease_cooldown_rect = add_health_surface.get_rect(center=(400, HEIGHT / 2))
+        cooldown_button = Button("Cooldown", (500, 300), 10)
+        cooldown_button.update()
 
-        SCREEN.blit(decrease_cooldown_surface, decrease_cooldown_rect)
-
-        if decrease_cooldown_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and self.money >= 10:
-            self.money -= 10
-            self.upgrades.decrease_BallCooldown(2500)
+        if cooldown_button.checkClick() and self.money >= cooldown_button.cost:
+            self.money -= cooldown_button.cost
+            self.upgrades.decrease_BallCooldown(1000)
             self.ball_cooldown = self.upgrades.ball_cooldown
 
+        cooldown_button = Button("Cooldown", (500, 300), 10)
+        cooldown_button.update()
 
+        if cooldown_button.checkClick() and self.money >= cooldown_button.cost:
+            self.money -= cooldown_button.cost
+            self.upgrades.decrease_BallCooldown(1000)
+            self.ball_cooldown = self.upgrades.ball_cooldown
 
+        speed_button = Button("Speed", (50, 300), 5)
+        speed_button.update()
+
+        if speed_button.checkClick() and self.money >= speed_button.cost:
+            self.money -= speed_button.cost
+            self.upgrades.add_Speed(1)
+            self.player.speed = self.upgrades.player_speed
+
+        amount_button = Button("Speed", (50, 100), 15)
+        amount_button.update()
+
+        if amount_button.checkClick() and self.money >= amount_button.cost:
+            self.money -= amount_button.cost
+            self.upgrades.increase_Spawn(1)
+            self.spawn_amount= self.upgrades.spawn_amount
 
         pygame.display.update()
 
@@ -154,7 +167,10 @@ class Game:
     def addBalls(self):
         currentime = pygame.time.get_ticks()
         if currentime - self.cooldown_time > self.ball_cooldown:
-            self.balls.append(Ball((SCREEN.get_width()/2, 200), self.upgrades.ball_health))
+            i = 0
+            while i < self.spawn_amount:
+                self.balls.append(Ball((SCREEN.get_width()/2, 200), self.upgrades.ball_health))
+                i += 1
             self.cooldown_time = pygame.time.get_ticks()
 
 
