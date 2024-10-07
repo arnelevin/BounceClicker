@@ -16,3 +16,14 @@ Channel4 = pygame.mixer.Channel(3)
 my_font = pygame.font.SysFont("Arial", 80)
 highscore_font = pygame.font.SysFont("Arial", 40)
 button_font = pygame.font.SysFont("Arial", 40)
+background_image = pygame.image.load("checker.png")
+background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+def draw_background():
+    SCREEN.blit(background_image, (0, 0))
+
+
+def get_randomColor():
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return (r, g, b)

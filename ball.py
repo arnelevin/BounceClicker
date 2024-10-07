@@ -11,10 +11,11 @@ class Ball:
         self.gravity = 0.6
         self.current_gravity = 0
         self.speed_y, self.speed_x = random.randint(-10, 10), random.randint(-10, 10)
+        self.color = get_randomColor()
 
 
     def draw(self):
-        pygame.draw.circle(SCREEN, "green", self.rect.center, 25)
+        pygame.draw.circle(SCREEN, self.color, self.rect.center, 25)
 
 
     def move(self):
